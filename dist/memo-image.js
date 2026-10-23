@@ -30,7 +30,7 @@ export function renderMemoCards({title,sections},makeCanvas=()=>document.createE
   }
 
   const titleLines=wrap(title||'Персональные рекомендации','48px Georgia',right-left);
-  const start=370+titleLines.length*61+56;
+  const start=354+titleLines.length*60+57;
   const pages=[[]];let page=pages[0],y=start;
 
   function newPage(){page=[];pages.push(page);y=start}
@@ -82,20 +82,20 @@ export function renderMemoCards({title,sections},makeCanvas=()=>document.createE
     // Warm paper, forest-green masthead and restrained brass accents.
     c.fillStyle='#faf8f3';c.fillRect(0,0,width,height);
     c.strokeStyle='#e5dfd2';c.lineWidth=1;c.strokeRect(32.5,32.5,width-65,height-65);
-    c.fillStyle='#263e31';c.fillRect(0,0,width,258);
-    c.fillStyle='#b49a70';c.fillRect(0,254,width,4);
-    c.strokeStyle='#b89d75';c.lineWidth=1;c.strokeRect(30.5,30.5,width-61,195);
-    c.fillStyle='#f7f3e9';c.font='76px Georgia';c.textAlign='left';
-    c.fillText('VALERI',left,64);
-    c.fillStyle='#d8c2a2';c.font='19px Arial';c.fillText('HAIR STUDIO',left,170);
+    c.fillStyle='#263e31';c.fillRect(0,0,width,246);
+    c.fillStyle='#b49a70';c.fillRect(0,242,width,4);
+    c.strokeStyle='#b89d75';c.lineWidth=1;c.strokeRect(30.5,30.5,width-61,183);
+    c.fillStyle='#f7f3e9';c.font='74px Georgia';c.textAlign='left';
+    c.fillText('VALERI',left,61);
+    c.fillStyle='#d8c2a2';c.font='19px Arial';c.fillText('HAIR STUDIO',left,161);
     c.textAlign='right';c.fillStyle='#d2be9f';c.font='17px Arial';
-    c.fillText('ПЕРСОНАЛЬНАЯ',right,101);c.fillText('ПАМЯТКА',right,127);c.textAlign='left';
+    c.fillText('ПЕРСОНАЛЬНАЯ',right,97);c.fillText('КАРТА УХОДА',right,123);c.textAlign='left';
 
     c.fillStyle='#9f865e';c.font='bold 19px Arial';
-    c.fillText('ИНДИВИДУАЛЬНЫЕ РЕКОМЕНДАЦИИ',left,306);
+    c.fillText('РЕКОМЕНДАЦИИ ПОСЛЕ ВИЗИТА',left,289);
     c.fillStyle='#283e32';c.font='48px Georgia';
-    titleLines.forEach((line,n)=>c.fillText(line,left,369+n*61));
-    c.strokeStyle='#d4c8b6';c.beginPath();c.moveTo(left,start-33);c.lineTo(right,start-33);c.stroke();
+    titleLines.forEach((line,n)=>c.fillText(line,left,354+n*60));
+    c.strokeStyle='#d4c8b6';c.beginPath();c.moveTo(left,start-29);c.lineTo(right,start-29);c.stroke();
 
     for(const row of rows){
       if(row.kind==='rule'){
