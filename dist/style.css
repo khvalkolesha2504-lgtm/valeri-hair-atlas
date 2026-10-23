@@ -97,3 +97,37 @@
 @media(max-width:800px){.memo-layout{grid-template-columns:1fr}.memo-preview{position:static}.aftercare-note{padding-top:55px;padding-bottom:65px}}
 @media(max-width:680px){#memo-form{padding:21px}#memo-form input,#memo-form select,#memo-form textarea{font-size:16px}.memo-actions{gap:12px}.memo-actions #memo-share.memo-action-primary{min-height:54px;font-size:13px}.memo-actions-secondary{grid-template-columns:1fr 1fr;gap:8px}.memo-actions .memo-actions-secondary button{font-size:11px;min-height:46px}.memo-preview{padding:26px}.memo-preview .memo-contact{flex-direction:column;gap:10px}.memo-preview .memo-contact span:last-child{text-align:left}#memo-image-dialog.memo-premium-dialog{width:calc(100vw - 20px);max-height:93dvh;padding:0}#memo-image-dialog .memo-dialog-header h2{font-size:32px}#memo-image-dialog .memo-dialog-header{padding:22px 20px 15px}#memo-image-dialog .memo-dialog-close{right:16px;top:15px}#memo-image-dialog .memo-dialog-body{padding:15px 18px}#memo-image-dialog .memo-dialog-footer{padding:13px 18px 16px}.memo-dialog-main-actions{gap:8px}#memo-image-dialog .memo-dialog-download,#memo-image-dialog .memo-dialog-share{font-size:11px;padding:9px;min-height:46px}.memo-file-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}#memo-image-dialog .memo-file-actions>*{width:100%}}
 @media(prefers-reduced-motion:reduce){.memo-actions button{transition:none!important}}
+
+
+/* VALERI care-card refinement — consistent brand hierarchy and modal rhythm */
+.memo-preview .brand{display:block;line-height:1.12}
+.memo-preview .brand span{display:block;margin-top:7px;font:600 11px/1.5 Arial,Helvetica,sans-serif;letter-spacing:.22em;color:#806e52}
+.memo-preview .memo-preview-kicker{margin:30px 0 0;padding-top:17px;border-top:1px solid #dcd5c7;color:#a18862;font:700 10px/1.55 Arial,Helvetica,sans-serif;letter-spacing:.12em}
+.memo-preview h3{margin:13px 0 25px}
+#memo-image-dialog.memo-premium-dialog{width:min(830px,calc(100vw - 32px));max-height:94dvh}
+#memo-image-dialog .memo-dialog-shell{display:grid;grid-template-rows:auto minmax(0,1fr) auto;max-height:94dvh}
+#memo-image-dialog .memo-dialog-header{display:block;position:relative;height:auto;min-height:0;width:auto;margin:0;top:auto;left:auto;right:auto;z-index:auto;padding:24px clamp(21px,4vw,41px) 17px;text-align:left;box-shadow:none;background:#fbfaf6;border-bottom:1px solid #e0dfd5}
+#memo-image-dialog .memo-dialog-topline{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:5px}
+#memo-image-dialog .memo-dialog-eyebrow{display:inline-block;max-width:calc(100% - 48px);font:700 10px/1.55 Arial,Helvetica,sans-serif;letter-spacing:.1em;color:#a18a67}
+#memo-image-dialog .memo-dialog-eyebrow span{padding:0 4px;color:#c0a988}
+#memo-image-dialog .memo-dialog-close{position:static;top:auto;right:auto;flex:0 0 38px;margin:0;display:grid;place-items:center;width:38px;height:38px;padding:0}
+#memo-image-dialog .memo-dialog-header h2{margin:3px 0 5px;max-width:none;padding:0;font:400 clamp(30px,4vw,42px)/1.15 Georgia,'Times New Roman',serif;letter-spacing:-.033em;color:#2d4334}
+#memo-image-dialog .memo-dialog-header h2 em{font-style:italic;color:#839478}
+#memo-image-dialog #memo-image-status{display:block;margin:7px 0 0;max-width:650px;font:400 12px/1.5 Arial,Helvetica,sans-serif;color:#748375}
+#memo-image-dialog .memo-dialog-body{padding:17px clamp(19px,5vw,42px);overflow-y:auto}
+#memo-image-pages figure{margin:0 auto 17px}
+#memo-image-pages figure:last-child{margin-bottom:0}
+#memo-image-dialog .memo-dialog-footer{padding:16px clamp(21px,4vw,41px) 17px}
+#memo-image-dialog .memo-dialog-other-actions{margin-top:10px;gap:10px 24px}
+#memo-image-dialog .memo-dialog-help{margin-top:10px;padding-top:9px}
+#memo-image-dialog .memo-dialog-help summary{padding:2px 0;line-height:1.5}
+@media(max-width:680px){
+ #memo-image-dialog .memo-dialog-header{padding:18px 19px 14px}
+ #memo-image-dialog .memo-dialog-topline{gap:8px}
+ #memo-image-dialog .memo-dialog-eyebrow{font-size:9px;letter-spacing:.04em}
+ #memo-image-dialog .memo-dialog-header h2{font-size:clamp(28px,7vw,34px);line-height:1.14}
+ #memo-image-dialog .memo-dialog-body{padding:14px 16px}
+ #memo-image-dialog .memo-dialog-footer{padding:13px 18px 14px}
+ #memo-image-dialog .memo-dialog-other-actions{justify-content:center;gap:6px 17px}
+ #memo-image-dialog .memo-dialog-help{margin-top:7px}
+}
