@@ -1,4 +1,4 @@
-import {initMemoImage} from './memo-image.js?v=15';
+import {initMemoImage} from './memo-image.js?v=16';
 export const tourSteps=[
 {mode:'whole',layer:'cuticle',title:'Один волос — несколько уровней защиты',text:'Сначала рассмотрим поверхность. Видимая длина — сформированный стержень волоса. Наружная оболочка защищает то, что находится внутри.',isolate:false},
 {mode:'cut',layer:'cuticle',title:'Кутикула: чешуйки, которые перекрывают друг друга',text:'Клетки кутикулы перекрывают друг друга, как черепица. Эта оболочка защищает кортекс и влияет на трение, блеск и обмен влагой. При износе поверхность становится шероховатой. Сейчас остальные детали приглушены.',isolate:true},
@@ -30,7 +30,7 @@ $('#memo-form').addEventListener('input',renderMemo);$('#memo-form').addEventLis
 try{const saved=JSON.parse(localStorage.getItem(storageKey)||'null');if(saved&&/^\d$/.test(String(saved.procedure))&&Number(saved.procedure)<procedures.length){$('#memo-procedure').value=String(saved.procedure);fields.forEach(k=>{if(typeof saved[k]==='string')$('#memo-'+k).value=saved[k].slice(0,$('#memo-'+k).maxLength)});$('#memo-status').textContent='Загружен сохранённый черновик.'}}catch{}
 $('#memo-save').onclick=()=>{try{localStorage.setItem(storageKey,JSON.stringify(memoData()));$('#memo-status').textContent='Черновик сохранён на этом устройстве.'}catch{$('#memo-status').textContent='Сохранение недоступно. Используйте печать или PDF.'}};
 $('#memo-clear').onclick=()=>{$('#memo-form').reset();try{localStorage.removeItem(storageKey)}catch{}renderMemo();$('#memo-status').textContent='Поля и черновик очищены.'};
-function memoText(){const d=memoData();return ['VALERI HAIR STUDIO — персональная памятка по уходу',procedures[Number(d.procedure)].title,'',...fields.flatMap((k,i)=>[(i+1)+'. '+labels[i]+':',d[k]||'По рекомендации мастера','']),'Вопросы по рекомендациям: +375 (33) 394-50-22','valerihairstudio.ru'].join('\n')}
+function memoText(){const d=memoData();return ['VALERI HAIR STUDIO — персональная карта ухода',procedures[Number(d.procedure)].title,'',...fields.flatMap((k,i)=>[(i+1)+'. '+labels[i]+':',d[k]||'По рекомендации мастера','']),'Вопросы по рекомендациям: +375 (33) 394-50-22','valerihairstudio.ru'].join('\n')}
 function manualCopy(text){$('#memo-manual').hidden=false;$('#memo-text').value=text;$('#memo-text').focus();$('#memo-text').select();$('#memo-status').textContent='Скопируйте выделенный текст и вставьте его в сообщение клиенту.'}
 async function copyMemo(){const text=memoText();try{if(!navigator.clipboard?.writeText)throw new Error('clipboard unavailable');await navigator.clipboard.writeText(text);$('#memo-status').textContent='Текст памятки скопирован. Теперь его можно вставить в сообщение клиенту.'}catch{manualCopy(text)}}
 $('#memo-copy').onclick=copyMemo;
