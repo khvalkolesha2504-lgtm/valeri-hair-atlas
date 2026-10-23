@@ -31,6 +31,11 @@ jobs:
           test -s dist/index.html
           test -s dist/app.js
           test -s dist/style.css
+      - name: Validate website JavaScript
+        run: |
+          node --input-type=module --check < dist/app.js
+          node --input-type=module --check < dist/consultation.js
+          node --input-type=module --check < dist/memo-image.js
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
       - name: Upload static website
