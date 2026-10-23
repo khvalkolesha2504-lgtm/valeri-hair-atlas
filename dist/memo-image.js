@@ -36,7 +36,7 @@ export function renderMemoCards({title,sections},makeCanvas=()=>document.createE
   function newPage(){page=[];pages.push(page);y=start}
   function heading(label,index,continued=false){
     if(page.length)page.push({kind:'rule',y:y-26});
-    page.push({kind:'number',text:String(index+1).padStart(2,'0'),y});
+    page.push({kind:'number',text:String(index+1),y});
     const text=label.toUpperCase()+(continued?' / ПРОДОЛЖЕНИЕ':'');
     for(const line of wrap(text,'21px Arial')){
       page.push({kind:'text',text:line,y,font:'21px Arial',color:'#6b786a',height:28});
@@ -87,9 +87,9 @@ export function renderMemoCards({title,sections},makeCanvas=()=>document.createE
     c.strokeStyle='#b89d75';c.lineWidth=1;c.strokeRect(30.5,30.5,width-61,195);
     c.fillStyle='#f7f3e9';c.font='76px Georgia';c.textAlign='left';
     c.fillText('VALERI',left,64);
-    c.fillStyle='#d8c2a2';c.font='19px Arial';c.fillText('H A I R   S T U D I O',left,170);
+    c.fillStyle='#d8c2a2';c.font='19px Arial';c.fillText('СТУДИЯ КРАСОТЫ ВОЛОС',left,170);
     c.textAlign='right';c.fillStyle='#d2be9f';c.font='17px Arial';
-    c.fillText('PERSONAL',right,101);c.fillText('HAIR CARE',right,127);c.textAlign='left';
+    c.fillText('ПЕРСОНАЛЬНАЯ',right,101);c.fillText('ПАМЯТКА',right,127);c.textAlign='left';
 
     c.fillStyle='#9f865e';c.font='bold 19px Arial';
     c.fillText('ИНДИВИДУАЛЬНЫЕ РЕКОМЕНДАЦИИ',left,306);
@@ -109,11 +109,11 @@ export function renderMemoCards({title,sections},makeCanvas=()=>document.createE
 
     c.strokeStyle='#b7a27b';c.lineWidth=1;c.beginPath();c.moveTo(left,footerY);c.lineTo(right,footerY);c.stroke();
     c.fillStyle='#294033';c.font='italic 27px Georgia';c.fillText('С заботой о ваших волосах,',left,footerY+29);
-    c.font='bold 19px Arial';c.fillText('VALERI HAIR STUDIO',left,footerY+78);
+    c.font='bold 19px Arial';c.fillText('СТУДИЯ VALERI',left,footerY+78);
     c.textAlign='right';c.font='20px Arial';c.fillText('+375 (33) 394-50-22',right,footerY+40);
     c.fillText('valerihairstudio.ru',right,footerY+76);
     c.fillStyle='#849083';c.font='16px Arial';
-    c.fillText(String(index+1).padStart(2,'0')+' / '+String(pages.length).padStart(2,'0'),right,footerY+143);
+    c.fillText(String(index+1)+' / '+String(pages.length),right,footerY+143);
     c.textAlign='left';c.fillText('РЕКОМЕНДАЦИИ ВАШЕГО МАСТЕРА',left,footerY+143);
     return canvas;
   });
@@ -186,7 +186,7 @@ export function initMemoImage({getData}){
     img.width=1080;img.loading=index?'lazy':'eager';
     if(total>1){
       const caption=document.createElement('figcaption');
-      caption.textContent='СТРАНИЦА '+String(index+1).padStart(2,'0')+' / '+String(total).padStart(2,'0');
+      caption.textContent='СТРАНИЦА '+String(index+1)+' / '+String(total);
       figure.append(caption);
     }
     figure.append(img);
