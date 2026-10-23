@@ -24,3 +24,76 @@
 
 /* Mobile usability */
 #scene{touch-action:none}.memo-open-image{display:inline-flex;align-items:center;justify-content:center;padding:14px 20px;border:1px solid #b4bca8;border-radius:5px;text-decoration:none}.memo-file-actions button:disabled{opacity:.5;cursor:not-allowed}button,a,input,select,textarea{-webkit-tap-highlight-color:transparent}button:focus-visible,a:focus-visible{outline:2px solid #8c7955;outline-offset:4px}@media(max-width:680px){#memo-form input,#memo-form textarea,#memo-form select{font-size:16px}.museum .view-controls button{min-width:40px;min-height:40px}.museum .view-controls>span{display:none}.museum .view-controls{justify-content:flex-end}.museum .modebar button,.explorer-options button{min-height:40px}.memo-actions button,.memo-file-actions>*{min-height:44px}.memo-file-actions{display:grid;grid-template-columns:1fr;width:100%}#memo-image-dialog{max-height:92dvh;overscroll-behavior:contain}#memo-image-pages figure{margin:20px 0 32px}#memo-image-pages img{max-width:100%}}
+
+
+/* VALERI PREMIUM MEMO v2 — understated salon editorial */
+.aftercare-note{padding-top:90px;padding-bottom:105px}
+.aftercare-note .section-heading h2{max-width:720px}
+.memo-layout{grid-template-columns:minmax(0,1.04fr) minmax(0,.96fr);gap:clamp(26px,4vw,64px);align-items:start;margin-top:34px}
+#memo-form{display:grid;gap:20px;background:#fffefa;border:1px solid #dcded5;padding:clamp(22px,3vw,39px);border-radius:12px;box-shadow:0 20px 45px rgba(35,50,39,.045)}
+#memo-form>label{display:block;font-size:11px;font-weight:600;letter-spacing:.04em;color:#667263;line-height:1.5}
+#memo-form input,#memo-form textarea,#memo-form select{display:block;width:100%;border:1px solid #d9dcd3;border-radius:7px;background:#f9f8f3;padding:13px 15px;margin-top:9px;font:400 14px/1.65 Arial,Helvetica,sans-serif;color:#2d4036;transition:border-color .2s,box-shadow .2s;background-clip:padding-box}
+#memo-form textarea{resize:vertical;min-height:78px}
+#memo-form input:focus,#memo-form select:focus,#memo-form textarea:focus{outline:none;border-color:#9d9276;box-shadow:0 0 0 3px #b0a17e24;background:#fff}
+#memo-form input::placeholder,#memo-form textarea::placeholder{color:#9fa69b}
+.memo-actions{display:grid;grid-template-columns:1fr;gap:13px;padding-top:10px}
+.memo-actions #memo-share.memo-action-primary{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:56px;width:100%;margin:0;border:1px solid #2d4537;border-radius:6px;background:#2d4537;color:#fff;padding:15px 21px;font:600 13px/1.3 Arial,Helvetica,sans-serif;letter-spacing:.03em;transition:background .2s,transform .2s}
+.memo-actions #memo-share.memo-action-primary:hover{background:#22372b;transform:translateY(-1px)}
+.memo-action-primary span{font-size:23px;line-height:1;font-weight:400;color:#d5c2a0}
+.memo-actions-secondary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.memo-actions .memo-actions-secondary button{width:100%;min-height:46px;padding:10px 14px;border:1px solid #cdd5c8;border-radius:6px;background:#f6f7f0;color:#385041;text-align:center;font-size:12px;font-weight:600;transition:border-color .2s,background .2s}
+.memo-actions .memo-actions-secondary button:hover{border-color:#8e9f8b;background:#edf0e6}
+.memo-actions-utility{display:flex;justify-content:space-between;gap:16px;align-items:center;padding-top:13px;border-top:1px solid #e5e7df}
+.memo-actions .memo-actions-utility button{width:auto;border:0;border-bottom:1px solid transparent;border-radius:0;background:transparent;color:#788576;font-size:11px;font-weight:500;padding:6px 0;min-height:35px}
+.memo-actions .memo-actions-utility button:hover{border-bottom-color:currentColor;color:#334e3e}
+.memo-actions .memo-actions-utility #memo-clear:hover{color:#935d50}
+#memo-form #memo-status{min-height:0;margin:0;font-size:12px;line-height:1.6;color:#667b67}
+#memo-form #memo-status:empty{display:none}
+.memo-preview{background:#f9f7f0;border:1px solid #d9d1c1;border-radius:2px;padding:clamp(28px,3.6vw,49px);box-shadow:0 24px 60px rgba(34,46,35,.07);position:relative}
+.memo-preview::before{content:"";height:5px;position:absolute;left:0;right:0;top:0;background:#b6a17d}
+.memo-preview .brand{font:400 37px/1.1 Georgia,serif;letter-spacing:.11em;color:#2a4033}
+.memo-preview .brand span{font:600 9px/1.4 Arial,Helvetica,sans-serif;letter-spacing:.19em;color:#a48d67;margin-top:10px}
+.memo-preview h3{margin:34px 0 32px;font:400 clamp(29px,3vw,36px)/1.2 Georgia,serif;color:#2a3d34}
+.memo-preview dt{font:600 10px/1.6 Arial,Helvetica,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:#9b8768;margin:23px 0 0;padding-top:17px;border-top:1px solid #e2ddd2}
+.memo-preview dd,#memo-content dd{font:400 14px/1.75 Arial,Helvetica,sans-serif;color:#394c40;margin:7px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
+.memo-preview .memo-contact{display:flex;justify-content:space-between;gap:20px;border-top:1px solid #cabea8;margin:30px 0 0;padding-top:20px;color:#37463a;font:400 11px/1.9 Arial,Helvetica,sans-serif}
+.memo-preview .memo-contact span:last-child{text-align:right}
+.memo-preview .memo-contact small{font:italic 14px Georgia,serif;color:#697967}
+.memo-preview>.small{font-size:9px;color:#8c9586;letter-spacing:.05em;text-transform:uppercase;margin-top:14px}
+#memo-image-dialog.memo-premium-dialog{width:min(780px,calc(100vw - 32px));max-height:min(94dvh,1030px);height:auto;padding:0;border:1px solid #d5cfbf;border-radius:12px;overflow:hidden;background:#f9f8f3;color:#2d4036;box-shadow:0 38px 110px rgba(10,28,19,.24)}
+#memo-image-dialog.memo-premium-dialog[open]{display:block}
+#memo-image-dialog::backdrop{background:rgba(18,35,25,.68);backdrop-filter:blur(5px)}
+.memo-dialog-shell{display:grid;grid-template-rows:auto minmax(110px,1fr) auto;max-height:min(94dvh,1030px);overflow:hidden}
+.memo-dialog-header{position:relative;padding:30px clamp(20px,4vw,42px) 18px;border-bottom:1px solid #e2e3db;background:#fbfaf6;text-align:left}
+.memo-dialog-eyebrow{font:700 10px/1.5 Arial,Helvetica,sans-serif;letter-spacing:.18em;color:#a08965}
+#memo-image-dialog .memo-dialog-header h2{font:400 clamp(30px,4.5vw,43px)/1.14 Georgia,serif;margin:12px 42px 9px 0;color:#2d4334}
+#memo-image-dialog .memo-dialog-header h2 em{color:#8c9a80}
+#memo-image-dialog .memo-dialog-close{position:absolute;right:24px;top:23px;width:38px;height:38px;border:1px solid #d7dbd1;border-radius:50%;background:#f5f4ed;color:#385344;font:400 24px/1 Arial}
+#memo-image-dialog #memo-image-status{margin:8px 0 0;font:400 12px/1.6 Arial,Helvetica,sans-serif;color:#6e7e70}
+.memo-dialog-body{padding:26px clamp(20px,5vw,48px);overflow-y:auto;min-height:120px;background:#f3f1eb;overscroll-behavior:contain}
+#memo-image-pages figure{margin:0 auto 24px;max-width:560px}
+#memo-image-pages figure:last-child{margin-bottom:0}
+#memo-image-pages img{display:block;width:100%;height:auto;margin:0;border:1px solid #e1dbcc;border-radius:1px;box-shadow:0 14px 40px #142f201c;background:#f9f7f0}
+#memo-image-pages figcaption{display:flex;justify-content:space-between;align-items:center;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#899583;margin-bottom:10px}
+.memo-dialog-footer{padding:18px clamp(20px,4vw,42px) 21px;border-top:1px solid #dfe1d7;background:#fbfaf6}
+.memo-dialog-main-actions{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+#memo-image-dialog .memo-dialog-download,#memo-image-dialog .memo-dialog-share{min-height:47px;width:100%;margin:0;display:flex;align-items:center;justify-content:center;padding:12px 14px;border-radius:6px;border:1px solid #2d4537;background:#2d4537;color:#fff;text-decoration:none;font:600 12px/1.35 Arial,Helvetica,sans-serif;letter-spacing:.02em;cursor:pointer}
+#memo-image-dialog .memo-dialog-download:hover,#memo-image-dialog .memo-dialog-share:hover:not(:disabled){background:#1d3327}
+#memo-image-dialog .memo-dialog-share{background:#efece2;border-color:#d7d0c0;color:#344b3b}
+#memo-image-dialog .memo-dialog-share:hover:not(:disabled){background:#e5dfd1;color:#2b4334}
+#memo-image-dialog .memo-dialog-share:disabled{opacity:.55;cursor:not-allowed}
+#memo-image-dialog [hidden]{display:none!important}
+.memo-dialog-main-actions:has(> [hidden]){grid-template-columns:1fr}
+.memo-dialog-other-actions{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center;justify-content:center;margin-top:13px}
+#memo-image-dialog .memo-dialog-other-actions button,#memo-image-dialog .memo-dialog-other-actions a{background:transparent;border:0;border-bottom:1px solid #ccd3c5;border-radius:0;padding:7px 0;min-height:34px;text-decoration:none;color:#4a6351;font:500 12px/1.3 Arial,Helvetica,sans-serif;cursor:pointer}
+#memo-image-dialog .memo-dialog-other-actions button:disabled,#memo-image-dialog .memo-dialog-other-actions a[aria-disabled="true"]{opacity:.5;cursor:not-allowed;pointer-events:none}
+.memo-dialog-note{font:400 11px/1.65 Arial,Helvetica,sans-serif;color:#738170;margin:11px 0 0}
+.memo-dialog-help{margin-top:13px;border-top:1px solid #e7e7de;padding-top:10px;color:#667865}
+.memo-dialog-help summary{cursor:pointer;font-size:11px;font-weight:600;color:#627763;list-style-position:inside}
+.memo-dialog-help p{font-size:11px;line-height:1.75;margin:10px 0 0}
+.memo-file-actions{display:flex;justify-content:flex-end;align-items:center;gap:10px;margin-top:11px}
+#memo-image-dialog .memo-file-actions .memo-open-image,#memo-image-dialog .memo-file-actions .memo-page-download,#memo-image-dialog .memo-file-actions .memo-copy-image,#memo-image-dialog .memo-file-actions .memo-page-send{background:#fff;border:1px solid #d0d5ca;color:#344c3a;border-radius:5px;padding:10px 12px;min-height:38px;text-decoration:none;font:600 11px/1.3 Arial,Helvetica,sans-serif;cursor:pointer;box-shadow:none;width:auto}
+#memo-image-dialog .memo-file-actions button:disabled{opacity:.5;cursor:not-allowed}
+@media(max-width:800px){.memo-layout{grid-template-columns:1fr}.memo-preview{position:static}.aftercare-note{padding-top:55px;padding-bottom:65px}}
+@media(max-width:680px){#memo-form{padding:21px}#memo-form input,#memo-form select,#memo-form textarea{font-size:16px}.memo-actions{gap:12px}.memo-actions #memo-share.memo-action-primary{min-height:54px;font-size:13px}.memo-actions-secondary{grid-template-columns:1fr 1fr;gap:8px}.memo-actions .memo-actions-secondary button{font-size:11px;min-height:46px}.memo-preview{padding:26px}.memo-preview .memo-contact{flex-direction:column;gap:10px}.memo-preview .memo-contact span:last-child{text-align:left}#memo-image-dialog.memo-premium-dialog{width:calc(100vw - 20px);max-height:93dvh;padding:0}#memo-image-dialog .memo-dialog-header h2{font-size:32px}#memo-image-dialog .memo-dialog-header{padding:22px 20px 15px}#memo-image-dialog .memo-dialog-close{right:16px;top:15px}#memo-image-dialog .memo-dialog-body{padding:15px 18px}#memo-image-dialog .memo-dialog-footer{padding:13px 18px 16px}.memo-dialog-main-actions{gap:8px}#memo-image-dialog .memo-dialog-download,#memo-image-dialog .memo-dialog-share{font-size:11px;padding:9px;min-height:46px}.memo-file-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}#memo-image-dialog .memo-file-actions>*{width:100%}}
+@media(prefers-reduced-motion:reduce){.memo-actions button{transition:none!important}}
