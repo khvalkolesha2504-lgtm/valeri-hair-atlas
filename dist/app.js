@@ -33,5 +33,5 @@ function applyDamage(){damageViewer?.setDamage(Number($('#damage-range').value)/
 $('#damage-range').addEventListener('input',()=>{updateSeverity();clearTimeout(damageTimer);damageTimer=setTimeout(applyDamage,75)});$('#damage-range').addEventListener('change',()=>{clearTimeout(damageTimer);applyDamage()});$$('[data-damage]').forEach(b=>b.onclick=()=>{damageType=b.dataset.damage;$$('[data-damage]').forEach(x=>{x.classList.toggle('active',x===b);x.setAttribute('aria-pressed',String(x===b))});updateDamageText();applyDamage()});updateDamageText();updateSeverity();
 const sections=$$('main>section[id]');const navObserver=new IntersectionObserver(entries=>{for(const e of entries)if(e.isIntersecting){$$('nav a').forEach(a=>{const active=a.hash==='#'+e.target.id;a.classList.toggle('current',active);if(active)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current')})}},{rootMargin:'-20% 0px -55% 0px'});sections.forEach(s=>navObserver.observe(s));
 
-import {initConsultation} from './consultation.js?v=13';
+import {initConsultation} from './consultation.js?v=14';
 initConsultation({procedures,selectLayer,setMode,getViewer:()=>mainViewer});
