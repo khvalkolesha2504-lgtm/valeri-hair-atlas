@@ -36,7 +36,7 @@ export function renderMemoCards({title,sections},makeCanvas=()=>document.createE
   function newPage(){page=[];pages.push(page);y=start}
   function heading(label,index,continued=false){
     if(page.length)page.push({kind:'rule',y:y-26});
-    page.push({kind:'number',text:String(index+1),y});
+    page.push({kind:'number',text:String(index+1),y}); // Always 1, 2, 3, 4; no leading zero.
     const text=label.toUpperCase()+(continued?' / ПРОДОЛЖЕНИЕ':'');
     for(const line of wrap(text,'21px Arial')){
       page.push({kind:'text',text:line,y,font:'21px Arial',color:'#6b786a',height:28});
