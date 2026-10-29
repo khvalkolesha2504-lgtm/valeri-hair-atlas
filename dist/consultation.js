@@ -21,7 +21,7 @@ $('#tour-prev').onclick=()=>{pause();showStep(tourIndex-1)};$('#tour-next').oncl
 $('#tour-close').onclick=()=>{pause();tourActive=false;$('#guided-tour').hidden=true;setIsolated(false);setMode('cut');$('#tour-start').focus()};
 $('#model').addEventListener('pointerdown',()=>{if(tourActive&&playing)pause()});$('#model').addEventListener('keydown',()=>{if(tourActive&&playing)pause()});document.addEventListener('visibilitychange',()=>{if(document.hidden&&playing)pause()});
 $('#isolate-toggle').onclick=()=>{setIsolated($('#isolate-toggle').getAttribute('aria-pressed')!=='true')};$('#labels-toggle').onclick=()=>{const on=$('#labels-toggle').getAttribute('aria-pressed')!=='true';$('#labels-toggle').setAttribute('aria-pressed',String(on));const v=getViewer();if(v){v.labelsVisible=on;v.dirty=true}};
-$('#reset').addEventListener('click',()=>setIsolated(false));$$('[data-mode]').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.mode==='molecule')setIsolated(false)}));
+$('#reset').addEventListener('click',()=>setIsolated(false));
 $('#memo-procedure').innerHTML=procedures.map((p,i)=>`<option value="${i}">${p.title}</option>`).join('');
 const fields=['visit','concerns','care','nextvisit'],labels=['Информация о визите','Что беспокоило клиента','Рекомендации по уходу','Следующий визит'],storageKey='valeri-aftercare-v2';
 function memoData(){return {procedure:$('#memo-procedure').value,...Object.fromEntries(fields.map(k=>[k,$('#memo-'+k).value.trim()]))}}

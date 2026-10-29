@@ -19,7 +19,7 @@ renderProcedures();$$('[data-filter]').forEach(b=>b.onclick=()=>{$$('[data-filte
 let mainViewer,damageViewer;
 let highlight=key=>mainViewer?.highlight(key);
 $$('[data-layer]').forEach(b=>b.onclick=()=>selectLayer(b.dataset.layer));selectLayer('cuticle');
-const captions={cut:['Волос в продольном разрезе','Защитная оболочка, кератиновые волокна и сердцевина'],whole:['Архитектура поверхности','Перекрывающиеся клетки образуют многослойную защиту'],explode:['Слои, которые работают вместе','Разделение условное: в волосе структуры связаны между собой'],cross:['Поперечное сечение','Кутикула окружает клетки кортекса; внутри — медулла'],molecule:['Кератин: от спиралей к волокну','Условная модель спиральных белковых цепей · не ДНК']};
+const captions={cut:['Волос в продольном разрезе','Защитная оболочка, кератиновые волокна и сердцевина'],whole:['Архитектура поверхности','Перекрывающиеся клетки образуют многослойную защиту'],explode:['Слои, которые работают вместе','Разделение условное: в волосе структуры связаны между собой'],cross:['Поперечное сечение','Кутикула окружает клетки кортекса; внутри — медулла']};
 let damaged=false;function updateCaption(){const c=damaged?['Повреждённый волос','Чешуйки приподняты и утрачены, липидной плёнки нет, в кортексе пустоты']:captions[mode];$('#scene-caption-title').textContent=c[0];$('#scene-caption-text').textContent=c[1]}
 function setMode(m){mode=m;$$('[data-mode]').forEach(b=>{b.classList.toggle('active',b.dataset.mode===m);b.setAttribute('aria-pressed',String(b.dataset.mode===m))});mainViewer?.setMode(m);updateCaption()}
 function setDamaged(on){damaged=on;$('#damage-toggle').setAttribute('aria-pressed',String(on));mainViewer?.setDamage(on?.75:0,'chemical');updateCaption()}

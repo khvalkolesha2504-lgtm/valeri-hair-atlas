@@ -33,9 +33,13 @@ jobs:
           test -s dist/style.css
       - name: Validate website JavaScript
         run: |
-          node --input-type=module --check < dist/app.js
-          node --input-type=module --check < dist/consultation.js
-          node --input-type=module --check < dist/memo-image.js
+          for f in dist/*.js; do
+            echo "Checking $f"
+            node --input-type=module --check < "$f"
+          done
+      - name: Stamp file versions
+        # Every publish gets its own ?v= so visitors never mix old and new files.
+        run: sed -i -E "s/\?v=[0-9a-f]+/?v=${GITHUB_SHA::8}/g" dist/*.html dist/*.js
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
       - name: Upload static website
