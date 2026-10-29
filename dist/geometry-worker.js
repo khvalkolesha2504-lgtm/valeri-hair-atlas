@@ -1,2 +1,2 @@
-import {createShaft,createKeratin} from './hair-geometry.js';
+import {createShaft,createKeratin} from './hair-geometry.js?v=2';
 self.onmessage=({data})=>{try{const groups=data.options.map(o=>o.mode==='molecule'?createKeratin():createShaft(o));const transfer=[];const payload=groups.map(group=>Object.fromEntries(Object.entries(group).map(([name,g])=>{const attrs={};for(const [key,a] of Object.entries(g.attributes)){attrs[key]={array:a.array,itemSize:a.itemSize};transfer.push(a.array.buffer)}const index=g.index?g.index.array:null;if(index)transfer.push(index.buffer);return [name,{attrs,index}]})));self.postMessage({id:data.id,groups:payload},transfer)}catch(error){self.postMessage({id:data.id,error:error.message})}};
