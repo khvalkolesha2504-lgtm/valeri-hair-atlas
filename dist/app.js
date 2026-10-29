@@ -1,47 +1,384 @@
-import {HairViewer} from './hair-viewer.js?v=13';
-import {damageTypes} from './guide-data.js?v=10';
-const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-const layers={"cuticle":{"title":"Кутикула —<br><em>защита и гладкость.</em>","text":"Кутикула — внешний слой волоса: плоские кератиновые клетки перекрывают друг друга, как черепица. Она защищает кортекс, влияет на трение, блеск и обмен влагой. Липиды на поверхности и между клетками помогают сохранять защитные свойства. При повреждении края чешуек приподнимаются, скалываются или утрачиваются: поверхность становится шероховатой, длина сильнее путается и легче обламывается.","tip":"На модели — наружные коричневые чешуйки. Состояние кутикулы влияет на ощущение сухости, но увлажнённость волоса зависит не только от неё."},"cortex":{"title":"Кортекс —<br><em>прочность, упругость и цвет.</em>","text":"Кортекс расположен под кутикулой и составляет основную массу волоса. Его вытянутые клетки содержат кератиновые волокна и пигмент меланин. Структура волокон и взаимодействия между ними определяют прочность и упругость, участвуют в формировании формы волоса. Химические и термические воздействия могут повреждать этот каркас: длина теряет устойчивость к нагрузке, появляется ломкость.","tip":"На модели — золотистые волокна и тёмные гранулы пигмента. Волокна увеличены для наглядности. Не проверяйте повреждение, намеренно растягивая мокрый волос."},"medulla":{"title":"Медулла —<br><em>внутренняя сердцевина.</em>","text":"Медулла находится в центре некоторых волос и состоит из менее плотно расположенных клеток с воздушными промежутками. Она может быть непрерывной, прерывистой или отсутствовать. Её роль в свойствах человеческого волоса изучена не полностью; отсутствие медуллы само по себе не означает повреждение.","tip":"На модели — центральная область. Её размер увеличен условно; основную механическую прочность волосу обеспечивает кортекс."}};
-let selected='cuticle',mode='cut',damage=0;
-function selectLayer(key){if(!layers[key])return;selected=key;const l=layers[key];$('#layer-title').innerHTML=l.title;$('#layer-text').textContent=l.text;$('#layer-tip').textContent=l.tip;$$('[data-layer]').forEach(b=>{b.classList.toggle('active',b.dataset.layer===key);b.setAttribute('aria-pressed',String(b.dataset.layer===key))});if(typeof highlight==='function')highlight(key)}
-const procedures=[
-{title:'Восстановление и реконструкция',symbol:'R',tag:'КАЧЕСТВО ДЛИНЫ',cat:['repair'],short:'Базовый уход для сухих, ломких и повреждённых волос.',aim:'На сайте студии это трёхэтапный комплекс с акцентом на мягкость, гладкость и качество длины.',discuss:'Расскажите о сухости, спутанности, окрашиваниях и о том, как волосы ведут себя после мытья.',limit:'Название «восстановление» описывает косметический уход. Конкретный результат зависит от исходного состояния и выбранного состава.'},
-{title:'BIOTIN',symbol:'B₇',tag:'ЭЛАСТИЧНОСТЬ',cat:['repair'],short:'Направление для ослабленных, ломких и кудрявых волос.',aim:'Студия предлагает BIOTIN для работы с плотностью, эластичностью и сохранением длины.',discuss:'Уточните, важно ли сохранить завиток, где обламывается длина и какие процедуры уже проводились.',limit:'Название процедуры не означает приём витаминов и не подтверждает лечение выпадения. Состав и протокол уточняются у мастера.'},
-{title:'STROTEX',symbol:'S',tag:'МНОГОСТУПЕНЧАТЫЙ УХОД',cat:['repair'],short:'Шестиступенчатый комплекс для пористых и повреждённых волос.',aim:'На сайте студии направление представлено для блонда, пушистых и сильно повреждённых волос.',discuss:'Мастеру важно знать историю осветления, наличие ломкости и предыдущих разглаживающих процедур.',limit:'Сильное повреждение требует оценки допустимой нагрузки. Число этапов само по себе не гарантирует результат.'},
-{title:'VIVA BOND™',symbol:'V',tag:'ГЛАДКОСТЬ И УХОД',cat:['repair','smooth'],short:'Уход с разглаживающим и ламинирующим эффектом.',aim:'В описании студии — гладкость без кератиновой процедуры и без утяжеления.',discuss:'Обсудите, нужен ли более гладкий внешний вид при сохранении естественного рисунка волос.',limit:'Это описание услуги студии. По одному названию нельзя установить механизм воздействия на связи внутри волоса.'},
-{title:'Кератин / ботокс',symbol:'K',tag:'ДИСЦИПЛИНА ВОЛОС',cat:['smooth'],short:'Для гладкости, блеска и более простой ежедневной укладки.',aim:'Студия объединяет эти направления в одну категорию. Конкретный вариант мастер подбирает по состоянию волос и желаемому эффекту.',discuss:'Уточните, насколько нужно изменить завиток, как будет выглядеть отрастание и какая термическая нагрузка предусмотрена.',limit:'«Ботокс для волос» — косметическое название, а не инъекция. Составы различаются: важны конкретный продукт и протокол.'},
-{title:'Тотальная реконструкция',symbol:'2×',tag:'КОМБИНИРОВАННЫЙ КОМПЛЕКС',cat:['repair','smooth'],short:'Многоступенчатый уход и кератин / ботокс в один день.',aim:'На сайте студии это сочетание двух полноценных процедур в рамках одного визита.',discuss:'Обсудите, подходит ли сочетание вашему состоянию волос и планам на окрашивание.',limit:'Больше процедур не всегда означает лучший результат. Совместимость оценивает мастер после диагностики.'},
-{title:'Пилинг кожи головы',symbol:'P',tag:'ОЧИЩЕНИЕ КОЖИ',cat:['scalp'],short:'Отдельная зона заботы: кожа головы, а не стержень волоса.',aim:'В студии предлагается глубокое очищение кожи головы, в том числе при частом использовании стайлинга.',discuss:'Сообщите о чувствительности кожи, раздражении и средствах, которыми уже пользуетесь.',limit:'При стойком зуде, воспалении или выпадении обратитесь к дерматологу. Косметический пилинг не заменяет диагностику и лечение.'}
+import { HairViewer } from "./hair-viewer.js?v=13";
+import { damageTypes } from "./guide-data.js?v=10";
+const $ = (s) => document.querySelector(s),
+  $$ = (s) => [...document.querySelectorAll(s)];
+const layers = {
+  cuticle: {
+    title: "Кутикула —<br><em>защита и гладкость.</em>",
+    text: "Кутикула — внешний слой волоса: плоские кератиновые клетки перекрывают друг друга, как черепица. Она защищает кортекс, влияет на трение, блеск и обмен влагой. Липиды на поверхности и между клетками помогают сохранять защитные свойства. При повреждении края чешуек приподнимаются, скалываются или утрачиваются: поверхность становится шероховатой, длина сильнее путается и легче обламывается.",
+    tip: "На модели — наружные коричневые чешуйки. Состояние кутикулы влияет на ощущение сухости, но увлажнённость волоса зависит не только от неё.",
+  },
+  cortex: {
+    title: "Кортекс —<br><em>прочность, упругость и цвет.</em>",
+    text: "Кортекс расположен под кутикулой и составляет основную массу волоса. Его вытянутые клетки содержат кератиновые волокна и пигмент меланин. Структура волокон и взаимодействия между ними определяют прочность и упругость, участвуют в формировании формы волоса. Химические и термические воздействия могут повреждать этот каркас: длина теряет устойчивость к нагрузке, появляется ломкость.",
+    tip: "На модели — золотистые волокна и тёмные гранулы пигмента. Волокна увеличены для наглядности. Не проверяйте повреждение, намеренно растягивая мокрый волос.",
+  },
+  medulla: {
+    title: "Медулла —<br><em>внутренняя сердцевина.</em>",
+    text: "Медулла находится в центре некоторых волос и состоит из менее плотно расположенных клеток с воздушными промежутками. Она может быть непрерывной, прерывистой или отсутствовать. Её роль в свойствах человеческого волоса изучена не полностью; отсутствие медуллы само по себе не означает повреждение.",
+    tip: "На модели — центральная область. Её размер увеличен условно; основную механическую прочность волосу обеспечивает кортекс.",
+  },
+};
+let selected = "cuticle",
+  mode = "cut",
+  damage = 0;
+function selectLayer(key) {
+  if (!layers[key]) return;
+  selected = key;
+  const l = layers[key];
+  $("#layer-title").innerHTML = l.title;
+  $("#layer-text").textContent = l.text;
+  $("#layer-tip").textContent = l.tip;
+  $$("[data-layer]").forEach((b) => {
+    b.classList.toggle("active", b.dataset.layer === key);
+    b.setAttribute("aria-pressed", String(b.dataset.layer === key));
+  });
+  if (typeof highlight === "function") highlight(key);
+}
+const procedures = [
+  {
+    title: "Восстановление и реконструкция",
+    symbol: "R",
+    tag: "КАЧЕСТВО ДЛИНЫ",
+    cat: ["repair"],
+    short: "Базовый уход для сухих, ломких и повреждённых волос.",
+    aim: "На сайте студии это трёхэтапный комплекс с акцентом на мягкость, гладкость и качество длины.",
+    discuss:
+      "Расскажите о сухости, спутанности, окрашиваниях и о том, как волосы ведут себя после мытья.",
+    limit:
+      "Название «восстановление» описывает косметический уход. Конкретный результат зависит от исходного состояния и выбранного состава.",
+  },
+  {
+    title: "BIOTIN",
+    symbol: "B₇",
+    tag: "ЭЛАСТИЧНОСТЬ",
+    cat: ["repair"],
+    short: "Направление для ослабленных, ломких и кудрявых волос.",
+    aim: "Студия предлагает BIOTIN для работы с плотностью, эластичностью и сохранением длины.",
+    discuss:
+      "Уточните, важно ли сохранить завиток, где обламывается длина и какие процедуры уже проводились.",
+    limit:
+      "Название процедуры не означает приём витаминов и не подтверждает лечение выпадения. Состав и протокол уточняются у мастера.",
+  },
+  {
+    title: "STROTEX",
+    symbol: "S",
+    tag: "МНОГОСТУПЕНЧАТЫЙ УХОД",
+    cat: ["repair"],
+    short: "Шестиступенчатый комплекс для пористых и повреждённых волос.",
+    aim: "На сайте студии направление представлено для блонда, пушистых и сильно повреждённых волос.",
+    discuss:
+      "Мастеру важно знать историю осветления, наличие ломкости и предыдущих разглаживающих процедур.",
+    limit:
+      "Сильное повреждение требует оценки допустимой нагрузки. Число этапов само по себе не гарантирует результат.",
+  },
+  {
+    title: "VIVA BOND™",
+    symbol: "V",
+    tag: "ГЛАДКОСТЬ И УХОД",
+    cat: ["repair", "smooth"],
+    short: "Уход с разглаживающим и ламинирующим эффектом.",
+    aim: "В описании студии — гладкость без кератиновой процедуры и без утяжеления.",
+    discuss:
+      "Обсудите, нужен ли более гладкий внешний вид при сохранении естественного рисунка волос.",
+    limit:
+      "Это описание услуги студии. По одному названию нельзя установить механизм воздействия на связи внутри волоса.",
+  },
+  {
+    title: "Кератин / ботокс",
+    symbol: "K",
+    tag: "ДИСЦИПЛИНА ВОЛОС",
+    cat: ["smooth"],
+    short: "Для гладкости, блеска и более простой ежедневной укладки.",
+    aim: "Студия объединяет эти направления в одну категорию. Конкретный вариант мастер подбирает по состоянию волос и желаемому эффекту.",
+    discuss:
+      "Уточните, насколько нужно изменить завиток, как будет выглядеть отрастание и какая термическая нагрузка предусмотрена.",
+    limit:
+      "«Ботокс для волос» — косметическое название, а не инъекция. Составы различаются: важны конкретный продукт и протокол.",
+  },
+  {
+    title: "Тотальная реконструкция",
+    symbol: "2×",
+    tag: "КОМБИНИРОВАННЫЙ КОМПЛЕКС",
+    cat: ["repair", "smooth"],
+    short: "Многоступенчатый уход и кератин / ботокс в один день.",
+    aim: "На сайте студии это сочетание двух полноценных процедур в рамках одного визита.",
+    discuss: "Обсудите, подходит ли сочетание вашему состоянию волос и планам на окрашивание.",
+    limit:
+      "Больше процедур не всегда означает лучший результат. Совместимость оценивает мастер после диагностики.",
+  },
+  {
+    title: "Пилинг кожи головы",
+    symbol: "P",
+    tag: "ОЧИЩЕНИЕ КОЖИ",
+    cat: ["scalp"],
+    short: "Отдельная зона заботы: кожа головы, а не стержень волоса.",
+    aim: "В студии предлагается глубокое очищение кожи головы, в том числе при частом использовании стайлинга.",
+    discuss: "Сообщите о чувствительности кожи, раздражении и средствах, которыми уже пользуетесь.",
+    limit:
+      "При стойком зуде, воспалении или выпадении обратитесь к дерматологу. Косметический пилинг не заменяет диагностику и лечение.",
+  },
 ];
-function renderProcedures(filter='all'){$('#procedure-grid').innerHTML=procedures.map((p,i)=>filter!=='all'&&!p.cat.includes(filter)?'':`<button class="procedure-card" data-procedure="${i}" aria-label="Подробнее: ${p.title}"><div class="card-top"><span class="symbol">${p.symbol}</span><span class="tag">${p.tag}</span></div><h3>${p.title}</h3><p>${p.short}</p><div class="card-footer"><span>Разобраться в процедуре</span><span>↗</span></div></button>`).join('');$$('[data-procedure]').forEach(b=>b.onclick=()=>{const p=procedures[Number(b.dataset.procedure)];$('#dialog-tag').textContent=p.tag;$('#dialog-title').textContent=p.title;$('#dialog-intro').textContent=p.short;$('#dialog-body').innerHTML=`<h3>Задача процедуры</h3><p>${p.aim}</p><h3>Что обсудить с мастером</h3><p>${p.discuss}</p><h3>Что важно учитывать</h3><p>${p.limit}</p>`;$('#procedure-dialog').showModal()})}
-renderProcedures();$$('[data-filter]').forEach(b=>b.onclick=()=>{$$('[data-filter]').forEach(x=>{x.classList.toggle('active',x===b);x.setAttribute('aria-pressed',String(x===b))});renderProcedures(b.dataset.filter)});$('.close').onclick=()=>$('#procedure-dialog').close();$('#procedure-dialog').addEventListener('click',e=>{if(e.target===$('#procedure-dialog')){const r=e.target.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)e.target.close()}});$('#menu').onclick=()=>{const open=$('nav').classList.toggle('open');$('#menu').setAttribute('aria-expanded',String(open))};$$('nav a').forEach(a=>a.onclick=()=>{$('nav').classList.remove('open');$('#menu').setAttribute('aria-expanded','false')});
+function renderProcedures(filter = "all") {
+  $("#procedure-grid").innerHTML = procedures
+    .map((p, i) =>
+      filter !== "all" && !p.cat.includes(filter)
+        ? ""
+        : `<button class="procedure-card" data-procedure="${i}" aria-label="Подробнее: ${p.title}"><div class="card-top"><span class="symbol">${p.symbol}</span><span class="tag">${p.tag}</span></div><h3>${p.title}</h3><p>${p.short}</p><div class="card-footer"><span>Разобраться в процедуре</span><span>↗</span></div></button>`,
+    )
+    .join("");
+  $$("[data-procedure]").forEach(
+    (b) =>
+      (b.onclick = () => {
+        const p = procedures[Number(b.dataset.procedure)];
+        $("#dialog-tag").textContent = p.tag;
+        $("#dialog-title").textContent = p.title;
+        $("#dialog-intro").textContent = p.short;
+        $("#dialog-body").innerHTML =
+          `<h3>Задача процедуры</h3><p>${p.aim}</p><h3>Что обсудить с мастером</h3><p>${p.discuss}</p><h3>Что важно учитывать</h3><p>${p.limit}</p>`;
+        $("#procedure-dialog").showModal();
+      }),
+  );
+}
+renderProcedures();
+$$("[data-filter]").forEach(
+  (b) =>
+    (b.onclick = () => {
+      $$("[data-filter]").forEach((x) => {
+        x.classList.toggle("active", x === b);
+        x.setAttribute("aria-pressed", String(x === b));
+      });
+      renderProcedures(b.dataset.filter);
+    }),
+);
+$(".close").onclick = () => $("#procedure-dialog").close();
+$("#procedure-dialog").addEventListener("click", (e) => {
+  if (e.target === $("#procedure-dialog")) {
+    const r = e.target.getBoundingClientRect();
+    if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom)
+      e.target.close();
+  }
+});
+$("#menu").onclick = () => {
+  const open = $("nav").classList.toggle("open");
+  $("#menu").setAttribute("aria-expanded", String(open));
+};
+$$("nav a").forEach(
+  (a) =>
+    (a.onclick = () => {
+      $("nav").classList.remove("open");
+      $("#menu").setAttribute("aria-expanded", "false");
+    }),
+);
 
-let mainViewer,damageViewer;
-let highlight=key=>mainViewer?.highlight(key);
-$$('[data-layer]').forEach(b=>b.onclick=()=>selectLayer(b.dataset.layer));selectLayer('cuticle');
-const captions={cut:['Волос в продольном разрезе','Защитная оболочка, кератиновые волокна и сердцевина'],whole:['Архитектура поверхности','Перекрывающиеся клетки образуют многослойную защиту'],explode:['Слои, которые работают вместе','Разделение условное: в волосе структуры связаны между собой'],cross:['Поперечное сечение','Кутикула окружает клетки кортекса; внутри — медулла']};
-let damaged=false;function updateCaption(){const c=damaged?['Повреждённый волос','Чешуйки приподняты и утрачены, липидной плёнки нет, в кортексе пустоты']:captions[mode];$('#scene-caption-title').textContent=c[0];$('#scene-caption-text').textContent=c[1]}
-function setMode(m){mode=m;$$('[data-mode]').forEach(b=>{b.classList.toggle('active',b.dataset.mode===m);b.setAttribute('aria-pressed',String(b.dataset.mode===m))});mainViewer?.setMode(m);updateCaption()}
-function setDamaged(on){damaged=on;$('#damage-toggle').setAttribute('aria-pressed',String(on));mainViewer?.setDamage(on?.75:0,'chemical');updateCaption()}
-$('#damage-toggle').onclick=()=>setDamaged(!damaged);$('#tour-start').addEventListener('click',()=>{if(damaged)setDamaged(false)});
-$$('[data-mode]').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));$$('.explore').forEach(b=>b.onclick=()=>{setMode(b.dataset.view);$('#model').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'})});
-try{mainViewer=new HairViewer($('#scene'),{onSelect:selectLayer});mainViewer.highlight(selected)}catch(e){console.error('Main 3D:',e)}
-try{damageViewer=new HairViewer($('#damage-scene'),{comparison:true})}catch(e){console.error('Damage 3D:',e)}
+let mainViewer, damageViewer;
+let highlight = (key) => mainViewer?.highlight(key);
+$$("[data-layer]").forEach((b) => (b.onclick = () => selectLayer(b.dataset.layer)));
+selectLayer("cuticle");
+const captions = {
+  cut: ["Волос в продольном разрезе", "Защитная оболочка, кератиновые волокна и сердцевина"],
+  whole: ["Архитектура поверхности", "Перекрывающиеся клетки образуют многослойную защиту"],
+  explode: [
+    "Слои, которые работают вместе",
+    "Разделение условное: в волосе структуры связаны между собой",
+  ],
+  cross: ["Поперечное сечение", "Кутикула окружает клетки кортекса; внутри — медулла"],
+};
+let damaged = false;
+function updateCaption() {
+  const c = damaged
+    ? [
+        "Повреждённый волос",
+        "Чешуйки приподняты и утрачены, липидной плёнки нет, в кортексе пустоты",
+      ]
+    : captions[mode];
+  $("#scene-caption-title").textContent = c[0];
+  $("#scene-caption-text").textContent = c[1];
+}
+function setMode(m) {
+  mode = m;
+  $$("[data-mode]").forEach((b) => {
+    b.classList.toggle("active", b.dataset.mode === m);
+    b.setAttribute("aria-pressed", String(b.dataset.mode === m));
+  });
+  mainViewer?.setMode(m);
+  updateCaption();
+}
+function setDamaged(on) {
+  damaged = on;
+  $("#damage-toggle").setAttribute("aria-pressed", String(on));
+  mainViewer?.setDamage(on ? 0.75 : 0, "chemical");
+  updateCaption();
+}
+$("#damage-toggle").onclick = () => setDamaged(!damaged);
+$("#tour-start").addEventListener("click", () => {
+  if (damaged) setDamaged(false);
+});
+$$("[data-mode]").forEach((b) => (b.onclick = () => setMode(b.dataset.mode)));
+$$(".explore").forEach(
+  (b) =>
+    (b.onclick = () => {
+      setMode(b.dataset.view);
+      $("#model").scrollIntoView({
+        behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+        block: "center",
+      });
+    }),
+);
+try {
+  mainViewer = new HairViewer($("#scene"), { onSelect: selectLayer });
+  mainViewer.highlight(selected);
+} catch (e) {
+  console.error("Main 3D:", e);
+}
+try {
+  damageViewer = new HairViewer($("#damage-scene"), { comparison: true });
+} catch (e) {
+  console.error("Damage 3D:", e);
+}
 // Short introduction when the model first comes into view: a gentle swing and the three layers in turn. Any touch hands control to the visitor.
-if(mainViewer&&!matchMedia('(prefers-reduced-motion: reduce)').matches){const host=$('#model'),order=['cuticle','cortex','medulla'],base=mainViewer.root.rotation.y;let running=false,step=0,timer,start;
-const stop=()=>{running=false;clearTimeout(timer)};
-const next=()=>{if(!running)return;if(step===order.length){selectLayer('cuticle');stop();return}selectLayer(order[step++]);timer=setTimeout(next,2600)};
-const swing=now=>{if(!running)return;start??=now;mainViewer.root.rotation.y=base+Math.sin((now-start)/1400)*.45;mainViewer.dirty=true;requestAnimationFrame(swing)};
-const seen=new IntersectionObserver(entries=>{if(!entries[0].isIntersecting)return;seen.disconnect();running=true;requestAnimationFrame(swing);timer=setTimeout(next,1200)},{threshold:.6});seen.observe(host);
-for(const type of ['pointerdown','keydown','wheel'])host.addEventListener(type,stop,{passive:true});for(const b of $$('#tour-start,[data-layer],[data-mode],.explore'))b.addEventListener('click',stop)}
-$('#zoomin').onclick=()=>mainViewer?.zoom(-.9);$('#zoomout').onclick=()=>mainViewer?.zoom(.9);$('#reset').onclick=()=>{setMode('cut');if(mainViewer)mainViewer.auto=false;$('#rotate').setAttribute('aria-pressed','false')};$('#rotate').onclick=()=>{if(!mainViewer)return;mainViewer.auto=!mainViewer.auto;$('#rotate').setAttribute('aria-pressed',String(mainViewer.auto));$('#rotate').setAttribute('aria-label',mainViewer.auto?'Остановить вращение':'Включить автоматическое вращение')};
-$('#fullscreen').onclick=async()=>{const el=$('#model');try{if(document.fullscreenElement)await document.exitFullscreen();else if(el.requestFullscreen)await el.requestFullscreen();else{el.classList.toggle('expanded');document.body.classList.toggle('viewer-expanded',el.classList.contains('expanded'))}}catch{el.classList.toggle('expanded');document.body.classList.toggle('viewer-expanded',el.classList.contains('expanded'))}};document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('#model').classList.remove('expanded');document.body.classList.remove('viewer-expanded')}});
-let damageType='chemical',damageTimer;
-function updateDamageText(){const p=damageTypes[damageType];$('#damage-copy').innerHTML=`<h3>${p.title}</h3><p>${p.intro}</p><h4>Что происходит</h4><p>${p.inside}</p><h4>Что можно заметить</h4><p>${p.notice}</p><h4>Как уменьшить нагрузку</h4><p>${p.action}</p><a class="source-inline" href="${p.source}" target="_blank" rel="noopener">${p.sourceName} ↗</a>`}
-function updateSeverity(){const d=Number($('#damage-range').value);$('#damage-value').value=d+'%';$('#severity-text').textContent=d<30?'Небольшое приподнимание краёв. Цвет и форма показаны условно; микроповреждения не всегда заметны визуально.':d<70?'Более выраженная шероховатость: отдельные края отходят от поверхности, часть защитных элементов утрачивается.':'Утрата части оболочки. При трении дополнительно показано условное расхождение внутренних волокон. Косметическое покрытие не возвращает утраченные клетки.';$('#damage-state').textContent=d<30?'Начальные изменения':d<70?'Выраженная шероховатость':'Сильный износ';}
-function applyDamage(){damageViewer?.setDamage(Number($('#damage-range').value)/100,damageType)}
-$('#damage-range').addEventListener('input',()=>{updateSeverity();clearTimeout(damageTimer);damageTimer=setTimeout(applyDamage,75)});$('#damage-range').addEventListener('change',()=>{clearTimeout(damageTimer);applyDamage()});$$('[data-damage]').forEach(b=>b.onclick=()=>{damageType=b.dataset.damage;$$('[data-damage]').forEach(x=>{x.classList.toggle('active',x===b);x.setAttribute('aria-pressed',String(x===b))});updateDamageText();applyDamage()});updateDamageText();updateSeverity();
-const sections=$$('main>section[id]');const navObserver=new IntersectionObserver(entries=>{for(const e of entries)if(e.isIntersecting){$$('nav a').forEach(a=>{const active=a.hash==='#'+e.target.id;a.classList.toggle('current',active);if(active)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current')})}},{rootMargin:'-20% 0px -55% 0px'});sections.forEach(s=>navObserver.observe(s));
+if (mainViewer && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  const host = $("#model"),
+    order = ["cuticle", "cortex", "medulla"],
+    base = mainViewer.root.rotation.y;
+  let running = false,
+    step = 0,
+    timer,
+    start;
+  const stop = () => {
+    running = false;
+    clearTimeout(timer);
+  };
+  const next = () => {
+    if (!running) return;
+    if (step === order.length) {
+      selectLayer("cuticle");
+      stop();
+      return;
+    }
+    selectLayer(order[step++]);
+    timer = setTimeout(next, 2600);
+  };
+  const swing = (now) => {
+    if (!running) return;
+    start ??= now;
+    mainViewer.root.rotation.y = base + Math.sin((now - start) / 1400) * 0.45;
+    mainViewer.dirty = true;
+    requestAnimationFrame(swing);
+  };
+  const seen = new IntersectionObserver(
+    (entries) => {
+      if (!entries[0].isIntersecting) return;
+      seen.disconnect();
+      running = true;
+      requestAnimationFrame(swing);
+      timer = setTimeout(next, 1200);
+    },
+    { threshold: 0.6 },
+  );
+  seen.observe(host);
+  for (const type of ["pointerdown", "keydown", "wheel"])
+    host.addEventListener(type, stop, { passive: true });
+  for (const b of $$("#tour-start,[data-layer],[data-mode],.explore"))
+    b.addEventListener("click", stop);
+}
+$("#zoomin").onclick = () => mainViewer?.zoom(-0.9);
+$("#zoomout").onclick = () => mainViewer?.zoom(0.9);
+$("#reset").onclick = () => {
+  setMode("cut");
+  if (mainViewer) mainViewer.auto = false;
+  $("#rotate").setAttribute("aria-pressed", "false");
+};
+$("#rotate").onclick = () => {
+  if (!mainViewer) return;
+  mainViewer.auto = !mainViewer.auto;
+  $("#rotate").setAttribute("aria-pressed", String(mainViewer.auto));
+  $("#rotate").setAttribute(
+    "aria-label",
+    mainViewer.auto ? "Остановить вращение" : "Включить автоматическое вращение",
+  );
+};
+$("#fullscreen").onclick = async () => {
+  const el = $("#model");
+  try {
+    if (document.fullscreenElement) await document.exitFullscreen();
+    else if (el.requestFullscreen) await el.requestFullscreen();
+    else {
+      el.classList.toggle("expanded");
+      document.body.classList.toggle("viewer-expanded", el.classList.contains("expanded"));
+    }
+  } catch {
+    el.classList.toggle("expanded");
+    document.body.classList.toggle("viewer-expanded", el.classList.contains("expanded"));
+  }
+};
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    $("#model").classList.remove("expanded");
+    document.body.classList.remove("viewer-expanded");
+  }
+});
+let damageType = "chemical",
+  damageTimer;
+function updateDamageText() {
+  const p = damageTypes[damageType];
+  $("#damage-copy").innerHTML =
+    `<h3>${p.title}</h3><p>${p.intro}</p><h4>Что происходит</h4><p>${p.inside}</p><h4>Что можно заметить</h4><p>${p.notice}</p><h4>Как уменьшить нагрузку</h4><p>${p.action}</p><a class="source-inline" href="${p.source}" target="_blank" rel="noopener">${p.sourceName} ↗</a>`;
+}
+function updateSeverity() {
+  const d = Number($("#damage-range").value);
+  $("#damage-value").value = d + "%";
+  $("#severity-text").textContent =
+    d < 30
+      ? "Небольшое приподнимание краёв. Цвет и форма показаны условно; микроповреждения не всегда заметны визуально."
+      : d < 70
+        ? "Более выраженная шероховатость: отдельные края отходят от поверхности, часть защитных элементов утрачивается."
+        : "Утрата части оболочки. При трении дополнительно показано условное расхождение внутренних волокон. Косметическое покрытие не возвращает утраченные клетки.";
+  $("#damage-state").textContent =
+    d < 30 ? "Начальные изменения" : d < 70 ? "Выраженная шероховатость" : "Сильный износ";
+}
+function applyDamage() {
+  damageViewer?.setDamage(Number($("#damage-range").value) / 100, damageType);
+}
+$("#damage-range").addEventListener("input", () => {
+  updateSeverity();
+  clearTimeout(damageTimer);
+  damageTimer = setTimeout(applyDamage, 75);
+});
+$("#damage-range").addEventListener("change", () => {
+  clearTimeout(damageTimer);
+  applyDamage();
+});
+$$("[data-damage]").forEach(
+  (b) =>
+    (b.onclick = () => {
+      damageType = b.dataset.damage;
+      $$("[data-damage]").forEach((x) => {
+        x.classList.toggle("active", x === b);
+        x.setAttribute("aria-pressed", String(x === b));
+      });
+      updateDamageText();
+      applyDamage();
+    }),
+);
+updateDamageText();
+updateSeverity();
+const sections = $$("main>section[id]");
+const navObserver = new IntersectionObserver(
+  (entries) => {
+    for (const e of entries)
+      if (e.isIntersecting) {
+        $$("nav a").forEach((a) => {
+          const active = a.hash === "#" + e.target.id;
+          a.classList.toggle("current", active);
+          if (active) a.setAttribute("aria-current", "location");
+          else a.removeAttribute("aria-current");
+        });
+      }
+  },
+  { rootMargin: "-20% 0px -55% 0px" },
+);
+sections.forEach((s) => navObserver.observe(s));
 
-import {initConsultation} from './consultation.js?v=16';
-initConsultation({procedures,selectLayer,setMode,getViewer:()=>mainViewer});
+import { initConsultation } from "./consultation.js?v=16";
+initConsultation({ procedures, selectLayer, setMode, getViewer: () => mainViewer });

@@ -1,39 +1,275 @@
-import {initMemoImage} from './memo-image.js?v=16';
-export const tourSteps=[
-{mode:'whole',layer:'cuticle',title:'Один волос — несколько уровней защиты',text:'Сначала рассмотрим поверхность. Видимая длина — сформированный стержень волоса. Наружная оболочка защищает то, что находится внутри.',isolate:false},
-{mode:'cut',layer:'cuticle',title:'Кутикула: чешуйки, которые перекрывают друг друга',text:'Клетки кутикулы перекрывают друг друга, как черепица. Эта оболочка защищает кортекс и влияет на трение, блеск и обмен влагой. При износе поверхность становится шероховатой. Сейчас остальные детали приглушены.',isolate:true},
-{mode:'cut',layer:'cortex',title:'Кортекс: основная масса волоса',text:'Кортекс — основная масса волоса. Кератиновые волокна обеспечивают прочность и упругость; тёмные гранулы обозначают пигмент меланин. При повреждении каркаса волос легче обламывается. Детали модели увеличены.',isolate:true},
-{mode:'cross',layer:'medulla',title:'Сечение: от оболочки к центру',text:'В поперечном разрезе видно расположение слоёв. Медулла находится в центре, но встречается не во всех волосах. Её отсутствие само по себе не означает повреждение.',isolate:false},
-{mode:'cut',layer:'cuticle',title:'Как это связано с уходом?',text:'Косметический уход помогает управляемости и внешнему виду длины. Он не выращивает утраченные клетки заново. Ниже можно узнать о процедурах и составить памятку вместе с мастером.',isolate:false}
+import { initMemoImage } from "./memo-image.js?v=16";
+export const tourSteps = [
+  {
+    mode: "whole",
+    layer: "cuticle",
+    title: "Один волос — несколько уровней защиты",
+    text: "Сначала рассмотрим поверхность. Видимая длина — сформированный стержень волоса. Наружная оболочка защищает то, что находится внутри.",
+    isolate: false,
+  },
+  {
+    mode: "cut",
+    layer: "cuticle",
+    title: "Кутикула: чешуйки, которые перекрывают друг друга",
+    text: "Клетки кутикулы перекрывают друг друга, как черепица. Эта оболочка защищает кортекс и влияет на трение, блеск и обмен влагой. При износе поверхность становится шероховатой. Сейчас остальные детали приглушены.",
+    isolate: true,
+  },
+  {
+    mode: "cut",
+    layer: "cortex",
+    title: "Кортекс: основная масса волоса",
+    text: "Кортекс — основная масса волоса. Кератиновые волокна обеспечивают прочность и упругость; тёмные гранулы обозначают пигмент меланин. При повреждении каркаса волос легче обламывается. Детали модели увеличены.",
+    isolate: true,
+  },
+  {
+    mode: "cross",
+    layer: "medulla",
+    title: "Сечение: от оболочки к центру",
+    text: "В поперечном разрезе видно расположение слоёв. Медулла находится в центре, но встречается не во всех волосах. Её отсутствие само по себе не означает повреждение.",
+    isolate: false,
+  },
+  {
+    mode: "cut",
+    layer: "cuticle",
+    title: "Как это связано с уходом?",
+    text: "Косметический уход помогает управляемости и внешнему виду длины. Он не выращивает утраченные клетки заново. Ниже можно узнать о процедурах и составить памятку вместе с мастером.",
+    isolate: false,
+  },
 ];
-export function initConsultation({procedures,selectLayer,setMode,getViewer}){
-const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-let tourIndex=0,tourActive=false,playing=false,timer=null;
-const schedule=()=>{clearTimeout(timer);if(playing)timer=setTimeout(()=>{if(tourIndex===tourSteps.length-1){playing=false;$('#tour-play').textContent='Повторить';$('#tour-play').setAttribute('aria-pressed','false');$('#tour-next').disabled=true}else showStep(tourIndex+1)},20000)};
-function setIsolated(value){$('#isolate-toggle').setAttribute('aria-pressed',String(value));$('#isolate-toggle').textContent=value?'Показать все слои':'Изолировать слой';getViewer()?.setIsolated(value)}
-function pause(){playing=false;clearTimeout(timer);$('#tour-play').textContent='Продолжить';$('#tour-play').setAttribute('aria-pressed','false')}
-function showStep(index){tourIndex=Math.max(0,Math.min(tourSteps.length-1,index));const t=tourSteps[tourIndex];$('#tour-count').textContent=String(tourIndex+1).padStart(2,'0');$('#tour-title').textContent=t.title;$('#tour-text').textContent=t.text;$('#tour-prev').disabled=tourIndex===0;$('#tour-next').disabled=tourIndex===tourSteps.length-1;$$('[data-tour-step]').forEach((b,i)=>{b.classList.toggle('active',i===tourIndex);b.setAttribute('aria-pressed',String(i===tourIndex))});setMode(t.mode);selectLayer(t.layer);setIsolated(t.isolate);if(t.mode==='cut'&&t.isolate)getViewer()?.focusLayer(t.layer);schedule()}
-$('#tour-progress').innerHTML=tourSteps.map((t,i)=>`<button type="button" data-tour-step="${i}" aria-label="Шаг ${i+1}: ${t.title}" aria-pressed="false"></button>`).join('');
-$('#tour-start').onclick=()=>{tourActive=true;playing=!reduced;$('#guided-tour').hidden=false;$('#tour-play').textContent=playing?'Пауза':'Продолжить';$('#tour-play').setAttribute('aria-pressed',String(playing));showStep(0);$('#model').scrollIntoView({behavior:reduced?'auto':'smooth',block:'center'})};
-$('#tour-play').onclick=()=>{if(playing){pause();return}playing=true;$('#tour-play').textContent='Пауза';$('#tour-play').setAttribute('aria-pressed','true');if(tourIndex===tourSteps.length-1)showStep(0);else schedule()};
-$('#tour-prev').onclick=()=>{pause();showStep(tourIndex-1)};$('#tour-next').onclick=()=>{pause();showStep(tourIndex+1)};$$('[data-tour-step]').forEach(b=>b.onclick=()=>{pause();showStep(Number(b.dataset.tourStep))});
-$('#tour-close').onclick=()=>{pause();tourActive=false;$('#guided-tour').hidden=true;setIsolated(false);setMode('cut');$('#tour-start').focus()};
-$('#model').addEventListener('pointerdown',()=>{if(tourActive&&playing)pause()});$('#model').addEventListener('keydown',()=>{if(tourActive&&playing)pause()});document.addEventListener('visibilitychange',()=>{if(document.hidden&&playing)pause()});
-$('#isolate-toggle').onclick=()=>{setIsolated($('#isolate-toggle').getAttribute('aria-pressed')!=='true')};$('#labels-toggle').onclick=()=>{const on=$('#labels-toggle').getAttribute('aria-pressed')!=='true';$('#labels-toggle').setAttribute('aria-pressed',String(on));const v=getViewer();if(v){v.labelsVisible=on;v.dirty=true}};
-$('#reset').addEventListener('click',()=>setIsolated(false));
-$('#memo-procedure').innerHTML=procedures.map((p,i)=>`<option value="${i}">${p.title}</option>`).join('');
-const fields=['visit','concerns','care','nextvisit'],labels=['Информация о визите','Что беспокоило клиента','Рекомендации по уходу','Следующий визит'],storageKey='valeri-aftercare-v2';
-function memoData(){return {procedure:$('#memo-procedure').value,...Object.fromEntries(fields.map(k=>[k,$('#memo-'+k).value.trim()]))}}
-function renderMemo(){$('#memo-manual').hidden=true;const d=memoData();$('#memo-title').textContent=procedures[Number(d.procedure)].title;const dl=$('#memo-content');dl.replaceChildren();fields.forEach((k,i)=>{const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=(i+1)+'. '+labels[i];dd.textContent=d[k]||'По рекомендации мастера';dl.append(dt,dd)})}
-$('#memo-form').addEventListener('input',renderMemo);$('#memo-form').addEventListener('change',renderMemo);$('#memo-form').onsubmit=e=>e.preventDefault();
-try{const saved=JSON.parse(localStorage.getItem(storageKey)||'null');if(saved&&/^\d$/.test(String(saved.procedure))&&Number(saved.procedure)<procedures.length){$('#memo-procedure').value=String(saved.procedure);fields.forEach(k=>{if(typeof saved[k]==='string')$('#memo-'+k).value=saved[k].slice(0,$('#memo-'+k).maxLength)});$('#memo-status').textContent='Загружен сохранённый черновик.'}}catch{}
-$('#memo-save').onclick=()=>{try{localStorage.setItem(storageKey,JSON.stringify(memoData()));$('#memo-status').textContent='Черновик сохранён на этом устройстве.'}catch{$('#memo-status').textContent='Сохранение недоступно. Используйте печать или PDF.'}};
-$('#memo-clear').onclick=()=>{$('#memo-form').reset();try{localStorage.removeItem(storageKey)}catch{}renderMemo();$('#memo-status').textContent='Поля и черновик очищены.'};
-function memoText(){const d=memoData();return ['VALERI HAIR STUDIO — персональная карта ухода',procedures[Number(d.procedure)].title,'',...fields.flatMap((k,i)=>[(i+1)+'. '+labels[i]+':',d[k]||'По рекомендации мастера','']),'Вопросы по рекомендациям: +375 (33) 394-50-22','valerihairstudio.ru'].join('\n')}
-function manualCopy(text){$('#memo-manual').hidden=false;$('#memo-text').value=text;$('#memo-text').focus();$('#memo-text').select();$('#memo-status').textContent='Скопируйте выделенный текст и вставьте его в сообщение клиенту.'}
-async function copyMemo(){const text=memoText();try{if(!navigator.clipboard?.writeText)throw new Error('clipboard unavailable');await navigator.clipboard.writeText(text);$('#memo-status').textContent='Текст памятки скопирован. Теперь его можно вставить в сообщение клиенту.'}catch{manualCopy(text)}}
-$('#memo-copy').onclick=copyMemo;
-initMemoImage({getData:()=>{const d=memoData();return {title:procedures[Number(d.procedure)].title,sections:fields.map((k,i)=>({label:labels[i],value:d[k]}))}}});
-$('#memo-print').onclick=()=>{renderMemo();document.body.classList.add('printing-memo');window.print()};window.addEventListener('afterprint',()=>document.body.classList.remove('printing-memo'));renderMemo();
+export function initConsultation({ procedures, selectLayer, setMode, getViewer }) {
+  const $ = (s) => document.querySelector(s),
+    $$ = (s) => [...document.querySelectorAll(s)];
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let tourIndex = 0,
+    tourActive = false,
+    playing = false,
+    timer = null;
+  const schedule = () => {
+    clearTimeout(timer);
+    if (playing)
+      timer = setTimeout(() => {
+        if (tourIndex === tourSteps.length - 1) {
+          playing = false;
+          $("#tour-play").textContent = "Повторить";
+          $("#tour-play").setAttribute("aria-pressed", "false");
+          $("#tour-next").disabled = true;
+        } else showStep(tourIndex + 1);
+      }, 20000);
+  };
+  function setIsolated(value) {
+    $("#isolate-toggle").setAttribute("aria-pressed", String(value));
+    $("#isolate-toggle").textContent = value ? "Показать все слои" : "Изолировать слой";
+    getViewer()?.setIsolated(value);
+  }
+  function pause() {
+    playing = false;
+    clearTimeout(timer);
+    $("#tour-play").textContent = "Продолжить";
+    $("#tour-play").setAttribute("aria-pressed", "false");
+  }
+  function showStep(index) {
+    tourIndex = Math.max(0, Math.min(tourSteps.length - 1, index));
+    const t = tourSteps[tourIndex];
+    $("#tour-count").textContent = String(tourIndex + 1).padStart(2, "0");
+    $("#tour-title").textContent = t.title;
+    $("#tour-text").textContent = t.text;
+    $("#tour-prev").disabled = tourIndex === 0;
+    $("#tour-next").disabled = tourIndex === tourSteps.length - 1;
+    $$("[data-tour-step]").forEach((b, i) => {
+      b.classList.toggle("active", i === tourIndex);
+      b.setAttribute("aria-pressed", String(i === tourIndex));
+    });
+    setMode(t.mode);
+    selectLayer(t.layer);
+    setIsolated(t.isolate);
+    if (t.mode === "cut" && t.isolate) getViewer()?.focusLayer(t.layer);
+    schedule();
+  }
+  $("#tour-progress").innerHTML = tourSteps
+    .map(
+      (t, i) =>
+        `<button type="button" data-tour-step="${i}" aria-label="Шаг ${i + 1}: ${t.title}" aria-pressed="false"></button>`,
+    )
+    .join("");
+  $("#tour-start").onclick = () => {
+    tourActive = true;
+    playing = !reduced;
+    $("#guided-tour").hidden = false;
+    $("#tour-play").textContent = playing ? "Пауза" : "Продолжить";
+    $("#tour-play").setAttribute("aria-pressed", String(playing));
+    showStep(0);
+    $("#model").scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "center" });
+  };
+  $("#tour-play").onclick = () => {
+    if (playing) {
+      pause();
+      return;
+    }
+    playing = true;
+    $("#tour-play").textContent = "Пауза";
+    $("#tour-play").setAttribute("aria-pressed", "true");
+    if (tourIndex === tourSteps.length - 1) showStep(0);
+    else schedule();
+  };
+  $("#tour-prev").onclick = () => {
+    pause();
+    showStep(tourIndex - 1);
+  };
+  $("#tour-next").onclick = () => {
+    pause();
+    showStep(tourIndex + 1);
+  };
+  $$("[data-tour-step]").forEach(
+    (b) =>
+      (b.onclick = () => {
+        pause();
+        showStep(Number(b.dataset.tourStep));
+      }),
+  );
+  $("#tour-close").onclick = () => {
+    pause();
+    tourActive = false;
+    $("#guided-tour").hidden = true;
+    setIsolated(false);
+    setMode("cut");
+    $("#tour-start").focus();
+  };
+  $("#model").addEventListener("pointerdown", () => {
+    if (tourActive && playing) pause();
+  });
+  $("#model").addEventListener("keydown", () => {
+    if (tourActive && playing) pause();
+  });
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden && playing) pause();
+  });
+  $("#isolate-toggle").onclick = () => {
+    setIsolated($("#isolate-toggle").getAttribute("aria-pressed") !== "true");
+  };
+  $("#labels-toggle").onclick = () => {
+    const on = $("#labels-toggle").getAttribute("aria-pressed") !== "true";
+    $("#labels-toggle").setAttribute("aria-pressed", String(on));
+    const v = getViewer();
+    if (v) {
+      v.labelsVisible = on;
+      v.dirty = true;
+    }
+  };
+  $("#reset").addEventListener("click", () => setIsolated(false));
+  $("#memo-procedure").innerHTML = procedures
+    .map((p, i) => `<option value="${i}">${p.title}</option>`)
+    .join("");
+  const fields = ["visit", "concerns", "care", "nextvisit"],
+    labels = [
+      "Информация о визите",
+      "Что беспокоило клиента",
+      "Рекомендации по уходу",
+      "Следующий визит",
+    ],
+    storageKey = "valeri-aftercare-v2";
+  function memoData() {
+    return {
+      procedure: $("#memo-procedure").value,
+      ...Object.fromEntries(fields.map((k) => [k, $("#memo-" + k).value.trim()])),
+    };
+  }
+  function renderMemo() {
+    $("#memo-manual").hidden = true;
+    const d = memoData();
+    $("#memo-title").textContent = procedures[Number(d.procedure)].title;
+    const dl = $("#memo-content");
+    dl.replaceChildren();
+    fields.forEach((k, i) => {
+      const dt = document.createElement("dt"),
+        dd = document.createElement("dd");
+      dt.textContent = i + 1 + ". " + labels[i];
+      dd.textContent = d[k] || "По рекомендации мастера";
+      dl.append(dt, dd);
+    });
+  }
+  $("#memo-form").addEventListener("input", renderMemo);
+  $("#memo-form").addEventListener("change", renderMemo);
+  $("#memo-form").onsubmit = (e) => e.preventDefault();
+  try {
+    const saved = JSON.parse(localStorage.getItem(storageKey) || "null");
+    if (
+      saved &&
+      /^\d$/.test(String(saved.procedure)) &&
+      Number(saved.procedure) < procedures.length
+    ) {
+      $("#memo-procedure").value = String(saved.procedure);
+      fields.forEach((k) => {
+        if (typeof saved[k] === "string")
+          $("#memo-" + k).value = saved[k].slice(0, $("#memo-" + k).maxLength);
+      });
+      $("#memo-status").textContent = "Загружен сохранённый черновик.";
+    }
+  } catch {}
+  $("#memo-save").onclick = () => {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(memoData()));
+      $("#memo-status").textContent = "Черновик сохранён на этом устройстве.";
+    } catch {
+      $("#memo-status").textContent = "Сохранение недоступно. Используйте печать или PDF.";
+    }
+  };
+  $("#memo-clear").onclick = () => {
+    $("#memo-form").reset();
+    try {
+      localStorage.removeItem(storageKey);
+    } catch {}
+    renderMemo();
+    $("#memo-status").textContent = "Поля и черновик очищены.";
+  };
+  function memoText() {
+    const d = memoData();
+    return [
+      "VALERI HAIR STUDIO — персональная карта ухода",
+      procedures[Number(d.procedure)].title,
+      "",
+      ...fields.flatMap((k, i) => [
+        i + 1 + ". " + labels[i] + ":",
+        d[k] || "По рекомендации мастера",
+        "",
+      ]),
+      "Вопросы по рекомендациям: +375 (33) 394-50-22",
+      "valerihairstudio.ru",
+    ].join("\n");
+  }
+  function manualCopy(text) {
+    $("#memo-manual").hidden = false;
+    $("#memo-text").value = text;
+    $("#memo-text").focus();
+    $("#memo-text").select();
+    $("#memo-status").textContent =
+      "Скопируйте выделенный текст и вставьте его в сообщение клиенту.";
+  }
+  async function copyMemo() {
+    const text = memoText();
+    try {
+      if (!navigator.clipboard?.writeText) throw new Error("clipboard unavailable");
+      await navigator.clipboard.writeText(text);
+      $("#memo-status").textContent =
+        "Текст памятки скопирован. Теперь его можно вставить в сообщение клиенту.";
+    } catch {
+      manualCopy(text);
+    }
+  }
+  $("#memo-copy").onclick = copyMemo;
+  initMemoImage({
+    getData: () => {
+      const d = memoData();
+      return {
+        title: procedures[Number(d.procedure)].title,
+        sections: fields.map((k, i) => ({ label: labels[i], value: d[k] })),
+      };
+    },
+  });
+  $("#memo-print").onclick = () => {
+    renderMemo();
+    document.body.classList.add("printing-memo");
+    window.print();
+  };
+  window.addEventListener("afterprint", () => document.body.classList.remove("printing-memo"));
+  renderMemo();
 }
