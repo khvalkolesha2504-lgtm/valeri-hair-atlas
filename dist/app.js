@@ -380,5 +380,8 @@ const navObserver = new IntersectionObserver(
 );
 sections.forEach((s) => navObserver.observe(s));
 
-import { initConsultation } from "./consultation.js?v=16";
-initConsultation({ procedures, selectLayer, setMode, getViewer: () => mainViewer });
+import { initConsultation } from "./consultation.js?v=17";
+try {
+  localStorage.removeItem("valeri-aftercare-v2");
+} catch {}
+initConsultation({ selectLayer, setMode, getViewer: () => mainViewer });

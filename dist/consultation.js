@@ -1,4 +1,3 @@
-import { initMemoImage } from "./memo-image.js?v=16";
 export const tourSteps = [
   {
     mode: "whole",
@@ -32,11 +31,11 @@ export const tourSteps = [
     mode: "cut",
     layer: "cuticle",
     title: "Как это связано с уходом?",
-    text: "Косметический уход помогает управляемости и внешнему виду длины. Он не выращивает утраченные клетки заново. Ниже можно узнать о процедурах и составить памятку вместе с мастером.",
+    text: "Косметический уход помогает управляемости и внешнему виду длины. Он не выращивает утраченные клетки заново. Ниже можно узнать о процедурах и домашнем уходе.",
     isolate: false,
   },
 ];
-export function initConsultation({ procedures, selectLayer, setMode, getViewer }) {
+export function initConsultation({ selectLayer, setMode, getViewer }) {
   const $ = (s) => document.querySelector(s),
     $$ = (s) => [...document.querySelectorAll(s)];
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -156,120 +155,4 @@ export function initConsultation({ procedures, selectLayer, setMode, getViewer }
     }
   };
   $("#reset").addEventListener("click", () => setIsolated(false));
-  $("#memo-procedure").innerHTML = procedures
-    .map((p, i) => `<option value="${i}">${p.title}</option>`)
-    .join("");
-  const fields = ["visit", "concerns", "care", "nextvisit"],
-    labels = [
-      "Информация о визите",
-      "Что беспокоило клиента",
-      "Рекомендации по уходу",
-      "Следующий визит",
-    ],
-    storageKey = "valeri-aftercare-v2";
-  function memoData() {
-    return {
-      procedure: $("#memo-procedure").value,
-      ...Object.fromEntries(fields.map((k) => [k, $("#memo-" + k).value.trim()])),
-    };
-  }
-  function renderMemo() {
-    $("#memo-manual").hidden = true;
-    const d = memoData();
-    $("#memo-title").textContent = procedures[Number(d.procedure)].title;
-    const dl = $("#memo-content");
-    dl.replaceChildren();
-    fields.forEach((k, i) => {
-      const dt = document.createElement("dt"),
-        dd = document.createElement("dd");
-      dt.textContent = i + 1 + ". " + labels[i];
-      dd.textContent = d[k] || "По рекомендации мастера";
-      dl.append(dt, dd);
-    });
-  }
-  $("#memo-form").addEventListener("input", renderMemo);
-  $("#memo-form").addEventListener("change", renderMemo);
-  $("#memo-form").onsubmit = (e) => e.preventDefault();
-  try {
-    const saved = JSON.parse(localStorage.getItem(storageKey) || "null");
-    if (
-      saved &&
-      /^\d$/.test(String(saved.procedure)) &&
-      Number(saved.procedure) < procedures.length
-    ) {
-      $("#memo-procedure").value = String(saved.procedure);
-      fields.forEach((k) => {
-        if (typeof saved[k] === "string")
-          $("#memo-" + k).value = saved[k].slice(0, $("#memo-" + k).maxLength);
-      });
-      $("#memo-status").textContent = "Загружен сохранённый черновик.";
-    }
-  } catch {}
-  $("#memo-save").onclick = () => {
-    try {
-      localStorage.setItem(storageKey, JSON.stringify(memoData()));
-      $("#memo-status").textContent = "Черновик сохранён на этом устройстве.";
-    } catch {
-      $("#memo-status").textContent = "Сохранение недоступно. Используйте печать или PDF.";
-    }
-  };
-  $("#memo-clear").onclick = () => {
-    $("#memo-form").reset();
-    try {
-      localStorage.removeItem(storageKey);
-    } catch {}
-    renderMemo();
-    $("#memo-status").textContent = "Поля и черновик очищены.";
-  };
-  function memoText() {
-    const d = memoData();
-    return [
-      "VALERI HAIR STUDIO — персональная карта ухода",
-      procedures[Number(d.procedure)].title,
-      "",
-      ...fields.flatMap((k, i) => [
-        i + 1 + ". " + labels[i] + ":",
-        d[k] || "По рекомендации мастера",
-        "",
-      ]),
-      "Вопросы по рекомендациям: +375 (33) 394-50-22",
-      "valerihairstudio.ru",
-    ].join("\n");
-  }
-  function manualCopy(text) {
-    $("#memo-manual").hidden = false;
-    $("#memo-text").value = text;
-    $("#memo-text").focus();
-    $("#memo-text").select();
-    $("#memo-status").textContent =
-      "Скопируйте выделенный текст и вставьте его в сообщение клиенту.";
-  }
-  async function copyMemo() {
-    const text = memoText();
-    try {
-      if (!navigator.clipboard?.writeText) throw new Error("clipboard unavailable");
-      await navigator.clipboard.writeText(text);
-      $("#memo-status").textContent =
-        "Текст памятки скопирован. Теперь его можно вставить в сообщение клиенту.";
-    } catch {
-      manualCopy(text);
-    }
-  }
-  $("#memo-copy").onclick = copyMemo;
-  initMemoImage({
-    getData: () => {
-      const d = memoData();
-      return {
-        title: procedures[Number(d.procedure)].title,
-        sections: fields.map((k, i) => ({ label: labels[i], value: d[k] })),
-      };
-    },
-  });
-  $("#memo-print").onclick = () => {
-    renderMemo();
-    document.body.classList.add("printing-memo");
-    window.print();
-  };
-  window.addEventListener("afterprint", () => document.body.classList.remove("printing-memo"));
-  renderMemo();
 }

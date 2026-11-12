@@ -8,7 +8,7 @@
       name="description"
       content="Интерактивный 3D-атлас волос: строение, повреждения и процедуры VALERI HAIR STUDIO."
     />
-    <link rel="stylesheet" href="style.css?v=18" />
+    <link rel="stylesheet" href="style.css?v=19" />
     <link rel="icon" href="favicon.ico" sizes="any" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="icon" type="image/png" sizes="96x96" href="favicon-96.png" />
@@ -18,7 +18,7 @@
     <meta property="og:title" content="VALERI — Атлас волос" />
     <meta
       property="og:description"
-      content="Строение волос, процедуры и персональная памятка по уходу."
+      content="Строение волос, повреждения, процедуры и домашний уход."
     />
     <meta
       property="og:image"
@@ -30,8 +30,7 @@
       <a class="brand" href="#home">VALERI<span>HAIR STUDIO · АТЛАС ВОЛОС</span></a>
       <nav aria-label="Основная навигация">
         <a href="#anatomy">Строение волоса</a><a href="#damage">Повреждения</a
-        ><a href="#procedures">Процедуры</a><a href="#aftercare-note">Памятка</a
-        ><a href="#care">Домашний уход</a>
+        ><a href="#procedures">Процедуры</a><a href="#care">Домашний уход</a>
       </nav>
       <a class="header-link" href="https://valerihairstudio.ru/" target="_blank" rel="noopener"
         >В студию ↗</a
@@ -342,75 +341,6 @@
           </article>
         </div>
       </section>
-      <section id="aftercare-note" class="aftercare-note wrap">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">VALERI / ИНДИВИДУАЛЬНЫЙ СЕРВИС</p>
-            <h2>Персональная<br /><em>карта ухода.</em></h2>
-          </div>
-        </div>
-        <div class="memo-layout">
-          <form id="memo-form">
-            <label>Проведённая процедура<select id="memo-procedure"></select></label
-            ><label
-              >1. Информация о визите<textarea
-                id="memo-visit"
-                rows="3"
-                maxlength="800"
-                placeholder="Дата визита, выбранный протокол и основные этапы"
-              ></textarea></label
-            ><label
-              >2. Что беспокоило клиента<textarea
-                id="memo-concerns"
-                rows="3"
-                maxlength="1200"
-                placeholder="Что хотелось улучшить, особенности состояния волос"
-              ></textarea></label
-            ><label
-              >3. Рекомендации по уходу<textarea
-                id="memo-care"
-                rows="5"
-                maxlength="2000"
-                placeholder="Средства и частота использования, рекомендации по сушке и укладке"
-              ></textarea></label
-            ><label
-              >4. Следующий визит<input
-                id="memo-nextvisit"
-                maxlength="300"
-                placeholder="Рекомендуемая дата или интервал"
-            /></label>
-            <div class="memo-actions">
-              <button type="button" id="memo-share" class="memo-action-primary">
-                Создать памятку <span aria-hidden="true">↗</span>
-              </button>
-              <div class="memo-actions-secondary">
-                <button type="button" id="memo-copy">Скопировать текст</button
-                ><button type="button" id="memo-print">Печать / PDF</button>
-              </div>
-              <div class="memo-actions-utility">
-                <button type="button" id="memo-save">Сохранить черновик</button
-                ><button type="button" id="memo-clear">Очистить поля</button>
-              </div>
-            </div>
-            <div id="memo-manual" hidden>
-              <label for="memo-text">Текст для отправки — выделите и скопируйте</label
-              ><textarea id="memo-text" rows="10" readonly></textarea>
-            </div>
-            <p class="small" id="memo-status" role="status" aria-live="polite"></p>
-          </form>
-          <article id="memo-preview" class="memo-preview">
-            <div class="brand">VALERI<span>HAIR STUDIO</span></div>
-            <p class="memo-preview-kicker">ПЕРСОНАЛЬНАЯ КАРТА УХОДА</p>
-            <h3 id="memo-title"></h3>
-            <dl id="memo-content"></dl>
-            <p class="memo-contact">
-              <span>VALERI HAIR STUDIO<br /><small>С заботой о ваших волосах</small></span
-              ><span>+375 (33) 394-50-22<br />valerihairstudio.ru</span>
-            </p>
-            <p class="small">Рекомендации вашего мастера</p>
-          </article>
-        </div>
-      </section>
       <section class="faq wrap" id="faq">
         <p class="eyebrow">ПОНЯТНЫЕ ОТВЕТЫ</p>
         <h2>О чём часто <em>спрашивают</em></h2>
@@ -514,61 +444,6 @@
         >Обсудить с мастером ↗</a
       >
     </dialog>
-    <dialog id="memo-image-dialog" class="memo-premium-dialog" aria-labelledby="memo-image-heading">
-      <div class="memo-dialog-shell">
-        <div class="memo-dialog-header">
-          <div class="memo-dialog-topline">
-            <span class="memo-dialog-eyebrow"
-              >VALERI HAIR STUDIO <span aria-hidden="true">·</span> ПЕРСОНАЛЬНЫЙ УХОД</span
-            >
-            <button
-              type="button"
-              id="memo-image-close"
-              class="memo-dialog-close"
-              aria-label="Закрыть памятку"
-            >
-              ×
-            </button>
-          </div>
-          <h2 id="memo-image-heading">Персональная <em>карта ухода</em></h2>
-          <p id="memo-image-status" role="status" aria-live="polite">Создаём изображение…</p>
-        </div>
-        <div class="memo-dialog-body"><div id="memo-image-pages" class="memo-pages"></div></div>
-        <footer class="memo-dialog-footer">
-          <div class="memo-dialog-main-actions">
-            <a id="memo-image-download" class="memo-dialog-download" href="#" download hidden
-              >↓ Скачать PNG</a
-            >
-            <button type="button" id="memo-image-send" class="memo-dialog-share" disabled>
-              Поделиться файлом ↗
-            </button>
-          </div>
-          <div class="memo-dialog-other-actions">
-            <button type="button" id="memo-image-copy" disabled>Скопировать изображение</button>
-            <a
-              id="memo-image-open"
-              href="#"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-disabled="true"
-              >Открыть изображение ↗</a
-            >
-          </div>
-          <p id="memo-image-multi-note" class="memo-dialog-note" hidden>
-            Памятка состоит из нескольких страниц. Скачайте нужные страницы под изображениями или
-            отправьте все файлы через системное меню.
-          </p>
-          <details class="memo-dialog-help">
-            <summary>Как отправить клиенту</summary>
-            <p>
-              Скачайте PNG и прикрепите его в переписке. На телефоне можно воспользоваться кнопкой
-              «Поделиться файлом». Если отправка недоступна, сохраните изображение и прикрепите его
-              вручную.
-            </p>
-          </details>
-        </footer>
-      </div>
-    </dialog>
-    <script type="module" src="app.js?v=18"></script>
+    <script type="module" src="app.js?v=19"></script>
   </body>
 </html>
